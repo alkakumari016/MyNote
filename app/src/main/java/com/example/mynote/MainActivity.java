@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     Button mBtn;
     DbHelper helper;
     RecyclerView mRv;
+    Button mVtnupdate;
+    Button mBtndelete;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -48,14 +50,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,100);
             }
         });
-
         mRv=findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        List<Note> list=new ArrayList<Note>();
+        List<Note> list;
+
         helper=new DbHelper(this);
         list=helper.getNotes();
         NoteAdapter adapter=new NoteAdapter(MainActivity.this,list);
         mRv.setAdapter(adapter);
+
+//        mBtndelete=findViewById(R.id.btn_delete);
+//        mBtndelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                helper=new DbHelper(MainActivity.this);
+//                Note note;
+//                helper.deleteNote(note);
+//            }
+//        });
 
 
 

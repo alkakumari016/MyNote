@@ -35,13 +35,15 @@
         android:layout_height="wrap_content"
         android:text="UPDATE"
         android:layout_marginStart="30dp"
-        android:layout_gravity="left"/>
+        android:layout_gravity="left"
+        android:id="@+id/btn_update"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:layout_gravity="right"
-            android:text="DELETE" />
+            android:text="DELETE"
+            android:id="@+id/btn_delete"/>
     </LinearLayout>
 </LinearLayout>
