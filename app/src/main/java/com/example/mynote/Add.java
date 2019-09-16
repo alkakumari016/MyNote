@@ -27,9 +27,6 @@ public class Add extends AppCompatActivity {
                 String text=mEttext.getText().toString().trim();
                 savetoDb(title,text);
 
-                Intent intent=new Intent();
-                setResult(RESULT_OK,intent);
-                finish();
 
 
 
@@ -41,5 +38,10 @@ public class Add extends AppCompatActivity {
     private void savetoDb(String title,String text) {
         helper=new DbHelper(this);
         helper.insertNote(title,text);
+
+        Intent intent=new Intent();
+        setResult(RESULT_OK,intent);
+        finish();
+
     }
 }

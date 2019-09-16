@@ -1,37 +1,37 @@
 package com.example.mynote;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoteAdapter.OnItemClickListener {
 
     Button mBtn;
     DbHelper helper;
     RecyclerView mRv;
 
+    TextView mTvNoItems;
+
+    private static int REQ_CODE_ADD = 100;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==100 && resultCode==RESULT_OK) {
+        if (requestCode == REQ_CODE_ADD && resultCode == RESULT_OK) {
             assert data != null;
-            helper=new DbHelper(this);
-            mRv=findViewById(R.id.rv);
-            mRv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-            List<Note> list;
-            list=helper.getNotes();
-            NoteAdapter adapter=new NoteAdapter(MainActivity.this,list);
-            mRv.setAdapter(adapter);
+            helper = new DbHelper(this);
+
+            setupAdapter();
 
         }
     }
@@ -40,24 +40,52 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mBtn=findViewById(R.id.btn_add);
+
+        mTvNoItems = findViewById(R.id.tv_no_item_found);
+        mBtn = findViewById(R.id.btn_add);
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,Add.class);
-                startActivityForResult(intent,100);
+                Intent intent = new Intent(MainActivity.this, Add.class);
+                startActivityForResult(intent, REQ_CODE_ADD);
             }
         });
 
-        mRv=findViewById(R.id.rv);
+        mRv = findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        List<Note> list=new ArrayList<Note>();
-        helper=new DbHelper(this);
-        list=helper.getNotes();
-        NoteAdapter adapter=new NoteAdapter(MainActivity.this,list);
-        mRv.setAdapter(adapter);
+
+        setupAdapter();
 
 
+    }
+
+    private void setupAdapter() {
+        List<Note> list;
+        helper = new DbHelper(this);
+        list = helper.getNotes();
+
+        if (list.size() > 0){
+            mTvNoItems.setVisibility(View.GONE);
+            NoteAdapter adapter = new NoteAdapter(MainActivity.this, list);
+            adapter.setListener(this);
+            mRv.setAdapter(adapter);
+
+        }else {
+            mTvNoItems.setVisibility(View.VISIBLE);
+            mRv.setVisibility(View.GONE);
+        }
+
+
+
+    }
+
+    @Override
+    public void onUpdate(Note note) {
+
+    }
+
+    @Override
+    public void onDelete(int id) {
 
     }
 }
