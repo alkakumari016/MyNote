@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,9 +30,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteVh> {
 
     @Override
     public void onBindViewHolder(@NonNull NoteVh holder, int position) {
-        Note note=list.get(position);
+        final Note note=list.get(position);
         holder.mTvtitle.setText(note.getTitle());
         holder.mTvtext.setText(note.getText());
+
+        holder.mBtnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onDelete(note.getId());
+            }
+        });
+
+        holder.mBtnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onUpdate(note);
+            }
+        });
 
     }
 
@@ -43,11 +58,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteVh> {
     public class NoteVh extends RecyclerView.ViewHolder {
 
         TextView mTvtitle,mTvtext;
+        Button mBtnUpdate,mBtnDelete;
 
         public NoteVh(@NonNull View itemView) {
             super(itemView);
             mTvtitle=itemView.findViewById(R.id.tv_title);
             mTvtext=itemView.findViewById(R.id.tv_text);
+
+            mBtnDelete = itemView.findViewById(R.id.btn_delete);
+            mBtnUpdate = itemView.findViewById(R.id.btn_update);
         }
     }
+
+    OnItemClickListener listener;
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void onUpdate(Note note);
+        void onDelete(int id);
+    }
+
 }
