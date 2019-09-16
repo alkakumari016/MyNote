@@ -92,5 +92,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
     @Override
     public void onDelete(int id) {
 
+
     }
 }
