@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Add.class);
+                intent.putExtra("EXTRA_TYPE","ADD");
                 startActivityForResult(intent, REQ_CODE_ADD);
             }
         });
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
 
     @Override
     public void onUpdate(Note note) {
+
+        Intent updateIntent = new Intent(MainActivity.this,Add.class);
+        updateIntent.putExtra("EXTRA_TYPE","UPDATE");
+        updateIntent.putExtra("NOTE",note);
 
     }
 
