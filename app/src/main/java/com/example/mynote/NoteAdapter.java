@@ -37,7 +37,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteVh> {
         holder.mBtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onDelete(note.getId());
+                listener.onDelete(note);
             }
         });
 
@@ -78,7 +78,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteVh> {
 
     public interface OnItemClickListener{
         void onUpdate(Note note);
-        void onDelete(int id);
+        void onDelete(Note note);
     }
 
 }

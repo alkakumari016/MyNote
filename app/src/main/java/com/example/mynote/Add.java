@@ -41,9 +41,26 @@ public class Add extends AppCompatActivity {
             });
         }else if (intentType.equals("UPDATE")){
 
-            Note note = getIntent().getParcelableExtra("NOTE");
+            final Note note = getIntent().getParcelableExtra("NOTE");
 
+            mEttitle.setText(note.getTitle());
             mEttext.setText(note.getText());
+            mIbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    helper=new DbHelper(Add.this);
+                    Note note1=new Note();
+                    String title=mEttitle.getText().toString().trim();
+                    String text=mEttext.getText().toString().trim();
+                    note1.setTitle(title);
+                    note1.setText(text);
+                    helper.updateNote(note1);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                }
+            });
 
         }
 

@@ -47,22 +47,32 @@ public class DbHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public int getNotesCount() {
-        String getQuery="SELECT * FROM "+Note.TABLE_NAME;
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery(getQuery,null);
-        int count=cursor.getCount();
-        cursor.close();
-        db.close();
-        return count;
-    }
+//    public int getNotesCount() {
+//        String getQuery="SELECT * FROM "+Note.TABLE_NAME;
+//        SQLiteDatabase db=this.getReadableDatabase();
+//        Cursor cursor=db.rawQuery(getQuery,null);
+//        int count=cursor.getCount();
+//        cursor.close();
+//        db.close();
+//        return count;
+   // }
 
 
     public void deleteNote(Note note) {
         SQLiteDatabase db=this.getWritableDatabase();
-        db.delete(Note.TABLE_NAME,Note.COLUMN_ID+" = ?",new String[]{String.valueOf(note.getId())});
+        db.delete(Note.TABLE_NAME,Note.TEXT+"=?",new String[]{String.valueOf(note.getText())});
         db.close();
     }
+
+    public int updateNote(Note note) {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put(Note.TITLE,note.getTitle());
+        cv.put(Note.TEXT,note.getText());
+
+        return db.update(Note.TABLE_NAME,cv,Note.COLUMN_ID+" =?",new String[]{String.valueOf(note.getId())});
+    }
+
 
 
 

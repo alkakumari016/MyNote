@@ -15,13 +15,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.OnItemClickListener {
 
-    Button mBtn;
+    Button mBtn,mBtnupdate,mBtndelete;
     DbHelper helper;
     RecyclerView mRv;
 
     TextView mTvNoItems;
 
-    private static int REQ_CODE_ADD = 100;
+    private static int REQ_CODE_ADD = 100,REQ_CODE_UPDATE=200;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -29,10 +29,13 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
 
         if (requestCode == REQ_CODE_ADD && resultCode == RESULT_OK) {
             assert data != null;
-            helper = new DbHelper(this);
 
             setupAdapter();
 
+        }
+        if(requestCode == REQ_CODE_UPDATE && resultCode == RESULT_OK) {
+            assert data!=null;
+            setupAdapter();
         }
     }
 
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
             }
         });
 
+
+
         mRv = findViewById(R.id.rv);
         mRv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
 
         if (list.size() > 0){
             mTvNoItems.setVisibility(View.GONE);
+            mRv.setVisibility(View.VISIBLE);
             NoteAdapter adapter = new NoteAdapter(MainActivity.this, list);
             adapter.setListener(this);
             mRv.setAdapter(adapter);
@@ -77,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
         }
 
 
-
     }
 
     @Override
@@ -86,12 +91,15 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.OnIte
         Intent updateIntent = new Intent(MainActivity.this,Add.class);
         updateIntent.putExtra("EXTRA_TYPE","UPDATE");
         updateIntent.putExtra("NOTE",note);
+        startActivityForResult(updateIntent,REQ_CODE_UPDATE);
 
     }
 
+
     @Override
-    public void onDelete(int id) {
-
-
+    public void onDelete(Note note) {
+        helper=new DbHelper(this);
+        helper.deleteNote(note);
+        setupAdapter();
     }
 }
